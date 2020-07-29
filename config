@@ -1,19 +1,54 @@
+# Mod is your main modifier key. A lot of key combinations depend on it.
+# Mod1 is the left alt key, Mod4 is the super ('Windows') key
 set $mod Mod4
+
+# Main Configureation
 font pango: Open Sans Bold 9
+
+# Colorschemes
 set $sea-green      #2EB398
 set $light-grey     #222B2E
 set $dark-grey      #1B2224
 set $light-text     #ABB9B6
 set $dark-text      #1B2224
 set $urgent-red     #D52929
+
+# Setting colors
+#                       border              background         text                 indicator
+client.focused          $sea-green          $sea-green         $light-text          $sea-green
+client.unfocused        $light-grey         $dark-grey         $light-text          $sea-green
+client.focused_inactive $light-grey         $dark-grey         $light-text          $dark-grey
+client.urgent           $urgent-red         $dark-grey         $light-text          $sea-green
+hide_edge_borders both
+
+# Setting gaps
+gaps inner 10
+
+# Removing window title bars
+smart_borders on
+for_window [class="^.*"] border pixel 1
+new_window 1pixel
+
+# Starting some basic services on startup
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
+exec picom -f &
+exec_always nitrogen --random --set-auto &
+exec_always --no-startup-id ~/.config/i3/scripts/auto_tiling.py &
+
+# Refresh veriable, used later on
 set $refresh_i3status killall -SIGUSR1 i3status
+
+# Volume key bindings
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+# The key that you hold to move windows in floating mode
 floating_modifier $mod
+
+# Key bindings
 bindsym $mod+Return exec xfce4-terminal
 bindsym $mod+b exec "firefox --new-window --private-window"
 bindsym $mod+Shift+f exec "thunar ~"
@@ -46,6 +81,15 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r exec ~/.config/i3/scripts/prompt "Restart i3?" "i3-msg restart"
+bindsym $mod+Shift+e exec ~/.config/i3/scripts/prompt "Shutdown?" "shutdown now"
+bindsym $mod+Shift+u resize shrink width 1 px or 1 ppt
+bindsym $mod+Shift+i resize grow height 1 px or 1 ppt
+bindsym $mod+Shift+o resize shrink height 1 px or 1 ppt
+bindsym $mod+Shift+p resize grow width 1 px or 1 ppt
+
+# Workspace settings
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -58,22 +102,9 @@ bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3
 bindsym $mod+Shift+4 move container to workspace number $ws4
-gaps inner 10
-smart_borders on
-for_window [class="^.*"] border pixel 1
-new_window 1pixel
-bindsym $mod+Shift+c reload
-bindsym $mod+Shift+r exec ~/.config/i3/scripts/prompt "Restart i3?" "i3-msg restart"
-bindsym $mod+Shift+e exec ~/.config/i3/scripts/prompt "Shutdown?" "shutdown now"
-bindsym $mod+Shift+u resize shrink width 1 px or 1 ppt
-bindsym $mod+Shift+i resize grow height 1 px or 1 ppt
-bindsym $mod+Shift+o resize shrink height 1 px or 1 ppt
-bindsym $mod+Shift+p resize grow width 1 px or 1 ppt
-client.focused          $sea-green          $sea-green         $light-text          $sea-green
-client.unfocused        $light-grey         $dark-grey         $light-text          $sea-green
-client.focused_inactive $light-grey         $dark-grey         $light-text          $dark-grey
-client.urgent           $urgent-red         $dark-grey         $light-text          $sea-green
-hide_edge_borders both
+
+# Setting bar
+# Bar pops up when Mod1 is held
 bar {
         status_command i3blocks -c ~/.config/i3/i3blocks.conf
         mode hide
@@ -91,7 +122,6 @@ bar {
                 urgent_workspace   $urgent-red        $urgent-red        $dark-text
             }
 }
+
+# Specific programs to be in floating mode
 for_window [class="Steam"] floating enable
-exec picom -f &
-exec_always nitrogen --random --set-auto &
-exec_always --no-startup-id ~/.config/i3/scripts/auto_tiling.py &
