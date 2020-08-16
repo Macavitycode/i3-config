@@ -33,8 +33,8 @@ new_window 1pixel
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id nm-applet
 exec picom -f &
-exec_always nitrogen --random --set-auto &
-# exec_always feh --bg-scale --randomize /path/to/dir/ &
+# exec_always nitrogen --random --set-auto &
+exec_always feh --bg-scale --randomize ~/projects/manjaro-config/wallpapers &
 exec_always --no-startup-id ~/.config/i3/scripts/auto_tiling.py &
 
 # Refresh veriable, used later on
@@ -51,10 +51,10 @@ floating_modifier $mod
 
 # Key bindings
 bindsym $mod+Return exec xfce4-terminal
-bindsym $mod+b exec "firefox --new-window --private-window"
-bindsym $mod+Shift+b exec "firefox --new-window"
-bindsym $mod+Shift+f exec "thunar ~"
-bindsym $mod+f exec "dmenufm ~"
+bindsym $mod+b exec "firefox --new-window --private-window &"
+bindsym $mod+Shift+b exec "firefox --new-window &"
+bindsym $mod+Shift+f exec "thunar ~ &"
+bindsym $mod+f exec "xfce4-terminal -x ranger ~ &"
 bindsym $mod+q kill 
 bindsym $mod+d exec ~/.config/i3/scripts/custom_i3-dmenu-desktop
 bindsym $mod+Shift+d exec ~/.config/i3/scripts/custom_dmenu_run
